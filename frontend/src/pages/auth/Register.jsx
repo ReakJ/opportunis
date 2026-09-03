@@ -1,8 +1,49 @@
 import {useState} from "react";
+import { useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
 import { Eye, EyeOff } from "lucide-react";
+import toast from "react-hot-toast";
+
+import {
+  createUserWithEmailAndPassword,
+  sendEmailVerification,
+} from "firebase/auth";
+
+import auth from "../../auth";
 
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
+
+  const navigate = useNavigate();
+
+  const {
+    register,
+    handleSubmit,
+    formState: {
+      errors,
+      isSubmitting,
+    },
+  } = useForm()
+
+  const handleRegister = async (data) => {
+    try {
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        data.email,
+        data.password
+      );
+
+      await sendEmailVerification(userCredential.user);
+
+      console.log("Email verified:", userCredential.user.emailVerified);
+
+      toast.success("Verification email sent!");
+
+      navigate("/verify-email")
+    } catch (error) {
+      toast.error(error.message);
+    } 
+  }
 
 
   return (
@@ -24,7 +65,10 @@ const Register = () => {
         <div className='card bg-base-100 shadow-xl'>
           <div className='card-body'>
             
-            <form className='space-y-4'>
+            <form 
+              className='space-y-4'
+              onSubmit={handleSubmit(handleRegister)}
+            >
 
               {/* Email */}
               <div>
@@ -38,10 +82,11 @@ const Register = () => {
                 </label>
 
                 <input 
+                  placeholder="you@example.com"
                   type="email"
                   id="email"
-                  placeholder="you@example.com"
                   className='input input-bordered w-full'
+                  {...register("email")}
                 />
               </div>
 
@@ -59,9 +104,10 @@ const Register = () => {
                 <div className="relative">
                   <input 
                     placeholder="Enter your password"
-                    type={showPassword ? "text" : "password"}
                     id="password"
+                    type={showPassword ? "text" : "password"}
                     className='input input-bordered w-full'
+                    {...register("password")}
                   />
 
                   <button
@@ -83,8 +129,16 @@ const Register = () => {
               <button
                 type="submit"
                 className="btn btn-primary w-full"
+                disabled={isSubmitting}
               >
-                Create Account
+                {isSubmitting ? (
+                  <>
+                    <span className="loading loading-spinner loading-sm"/>
+                    Creating Account...
+                  </>
+                ) : (
+                  "Create Account"
+                )}
               </button>
 
             </form>
