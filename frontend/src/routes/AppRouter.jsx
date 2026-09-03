@@ -6,6 +6,7 @@ import {
 import ProtectedRoute from "./ProtectedRoute";
 
 import Register from "../pages/auth/Register";
+import Login from "../pages/auth/Login";
 import VerifyEmail from "../pages/auth/VerifyEmail";
 
 const router = createBrowserRouter(
@@ -13,7 +14,8 @@ const router = createBrowserRouter(
     <>
       {/* Public Routes */}
       <Route path="/" element={<h1>Opportunis Home</h1>} />
-      <Route path="/register" element={<Register />} />
+      <Route path="/sign-up" element={<Register />} />
+      <Route path="/sign-in" element={<Login />} />
       <Route path="/verify-email" element={<VerifyEmail />} />
 
       {/* Protected Routes */}

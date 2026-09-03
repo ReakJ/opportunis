@@ -5,13 +5,12 @@ import { Eye, EyeOff } from "lucide-react";
 import toast from "react-hot-toast";
 
 import {
-  createUserWithEmailAndPassword,
-  sendEmailVerification,
+  signInWithEmailAndPassword
 } from "firebase/auth";
 
 import auth from "../../auth";
 
-const Register = () => {
+const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   const navigate = useNavigate();
@@ -25,19 +24,20 @@ const Register = () => {
     },
   } = useForm()
 
-  const handleRegister = async (data) => {
+  const handleLogin = async (data) => {
     try {
-      const userCredential = await createUserWithEmailAndPassword(
+      const userCredential = await signInWithEmailAndPassword(
         auth,
         data.email,
         data.password
       );
 
-      await sendEmailVerification(userCredential.user);
+      if (!userCredential.user.emailVerified) {
+        navigate("/verify-email")
+        return
+      }
 
-      toast.success("Verification email sent!");
-
-      navigate("/verify-email")
+      navigate("/dashboard")
     } catch (error) {
       toast.error(error.message);
     } 
@@ -55,7 +55,7 @@ const Register = () => {
           </h1>
 
           <p className='text-base-content/60 mt-2'>
-            Sign up your account 
+            Sign in to your account 
           </p>
         </div>
 
@@ -65,7 +65,7 @@ const Register = () => {
             
             <form 
               className='space-y-4'
-              onSubmit={handleSubmit(handleRegister)}
+              onSubmit={handleSubmit(handleLogin)}
             >
 
               {/* Email */}
@@ -132,10 +132,10 @@ const Register = () => {
                 {isSubmitting ? (
                   <>
                     <span className="loading loading-spinner loading-sm"/>
-                    Signing Up...
+                    Signing In...
                   </>
                 ) : (
-                  "Sign Up"
+                  "Sign In"
                 )}
               </button>
 
@@ -149,16 +149,16 @@ const Register = () => {
               type="button"
               className="btn btn-outline w-full"
             >
-              Sign up with Google
+              Sign in with Google
             </button>
 
             <p className="text-center text-sm mt-2">
-              Already have an account?{" "}
-                <Link to="/sign-in">
-                  <span className="link link-primary">
-                    Sign in
-                  </span>
-                </Link>
+              Don't have an account?{" "}
+              <Link to="/sign-up">
+                <span className="link link-primary">
+                  Sign up
+                </span>
+              </Link>
             </p>
 
           </div>
@@ -176,4 +176,4 @@ const Register = () => {
   )
 }
 
-export default Register
+export default Login;

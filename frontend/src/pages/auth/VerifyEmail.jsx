@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
 import auth from "../../auth";
+import { useAuth } from "../../context/useAuth";
 
 const VerifyEmail = () => {
   const navigate = useNavigate();
@@ -12,7 +13,7 @@ const VerifyEmail = () => {
   const [checking, setChecking] = useState(false);
   const [resending, setResending] = useState(false);
 
-  const user = auth.currentUser;
+  const { user, loading } = useAuth();
 
   const checkVerification = async () => {
     if(!user) {
@@ -55,6 +56,14 @@ const VerifyEmail = () => {
     } finally {
       setResending(false);
     };
+  }
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-base-200 flex items-center justify-center">
+        <span className="loading loading-spinner loading-lg" />
+      </div>
+    );
   }
 
   if (!user) {
