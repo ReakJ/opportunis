@@ -1,25 +1,21 @@
-import { useEffect, useState } from "react";
-
 function App() {
-    const [message, setMessage] = useState("");
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-base-200">
+      <div className="card bg-base-100 shadow-xl p-8">
+        <h1 className="text-3xl font-bold mb-4">
+          Opportunis
+        </h1>
 
-    useEffect(() => {
-        fetch("http://localhost:5000/api/test")
-            .then((response) => response.json())
-            .then((data) => {
-                setMessage(data.message);
-            })
-            .catch((error) => {
-                console.error("Error:", error);
-            });
-    }, []);
+        <p className="mb-6">
+          Tailwind + DaisyUI is working!
+        </p>
 
-    return (
-        <div>
-            <h1>Opportunis</h1>
-            <p>{message}</p>
-        </div>
-    );
+        <button className="btn btn-primary">
+          Test Button
+        </button>
+      </div>
+    </div>
+  );
 }
 
 export default App;
