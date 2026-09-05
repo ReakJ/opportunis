@@ -1,13 +1,12 @@
 import { firebaseAdminAuth } from "../config/firebaseAdmin.js";
+import ApiError from "../errors/ApiError.js";
 
 const authMiddleware = async (req, resizeBy, next) => {
   try {
     const authHeader = req.headers.authorization;
 
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      return resizeBy.status(401).json({
-        message: "Authentication required",
-      });
+      throw new ApiError(401, "Authentication required");
     }
 
     const idToken = authHeader.split("Bearer ")[1];
@@ -18,9 +17,7 @@ const authMiddleware = async (req, resizeBy, next) => {
 
     next();
   } catch (error) {
-      return res.status(401).json({
-        message: "Invalid or expired authentication token",
-    });
+    next(error);
   }
 };
 
