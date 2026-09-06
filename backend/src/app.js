@@ -1,6 +1,8 @@
 import express from "express";
 import cors from "cors";
-import errorMiddleware from "./middleware/errorMiddleware.js"
+
+import errorMiddleware from "./middleware/errorMiddleware.js";
+import onboardingRoutes from "./routes/onboardingRoutes.js";
 
 const app = express();
 
@@ -12,11 +14,7 @@ app.get("/", (req, res) => {
     res.send("Opportunis backend is Running!");
 });
 
-app.get("/api/test", (req, res) => {
-    res.json({
-        message: "Opportunis API is working!"
-    });
-});
+app.use("/api/onboarding", onboardingRoutes);
 
 app.use(errorMiddleware);
 
