@@ -12,16 +12,19 @@ const employeeProfileSchema = new mongoose.Schema(
     personal: {
       firstName: {
         type: String,
+        required: true,
         trim: true,
       },
 
       lastName: {
         type: String,
+        required: true,
         trim: true,
       },
 
       phone: {
         type: String,
+        required: true,
         trim: true,
       },
 
@@ -33,16 +36,19 @@ const employeeProfileSchema = new mongoose.Schema(
       location: {
         city: {
           type: String,
+          required: true,
           trim: true,
         },
 
         state: {
           type: String,
+          required: true,
           trim: true,
         },
 
         country: {
           type: String,
+          required: true,
           trim: true
         },
       },
@@ -51,6 +57,7 @@ const employeeProfileSchema = new mongoose.Schema(
     professional: {
       headline: {
         type: String,
+        required: true,
         trim: true,
       },
 
@@ -73,6 +80,7 @@ const employeeProfileSchema = new mongoose.Schema(
 
       experienceLevel: {
         type: String,
+        required: true,
         enum: ["fresher", "entry", "mid", "senior"],
       },
     },
