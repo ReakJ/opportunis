@@ -16,8 +16,6 @@ const OnboardingGuard = () => {
         setSyncLoading(false);
         return;
       }
-      
-      setSyncLoading(true);
 
       try {
         const result = await syncOnboarding();
