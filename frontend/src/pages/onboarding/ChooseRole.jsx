@@ -1,8 +1,25 @@
 import React, { useState } from 'react';
 import { BriefcaseBusiness, UserRound, Check } from "lucide-react";
+import { useOnboarding } from '../../context/useOnboarding';
+import toast from 'react-hot-toast';
 
 const ChooseRole = () => {
+  const { updateRole } = useOnboarding();
+
   const [role, setRole] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  const handleRole = async () => {
+    try {
+      setLoading(true);
+
+      await updateRole(role);
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      setLoading(false)
+    }
+  }
   
   return (
     <div className="min-h-screen bg-base-200 px-6 py-8 flex items-center justify-center">
@@ -123,11 +140,19 @@ const ChooseRole = () => {
         <div className="flex flex-col items-center mt-10">
           <button
             type="button"
-            disabled={!role}
-            onClick={() => console.log("Selected role: ", role)}
+            disabled={!role || loading}
+            onClick={handleRole}
             className="btn btn-primary px-10 w-2xs"
-          >
-            Continue →
+          > 
+            {loading ? (
+              <>
+                <span className="loading loading-spinner loading-sm"/>
+                Processing...
+              </>
+            ) : (
+              "Continue →"
+            )}
+            
           </button>
         </div>
       </div>

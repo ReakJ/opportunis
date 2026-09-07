@@ -1,41 +1,16 @@
-import { useEffect, useState } from "react";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
+
 import { useAuth } from "../context/useAuth";
-import { syncOnboarding } from "../services/onboardingService";
+import { useOnboarding } from "../context/useOnboarding";
 
 const OnboardingGuard = () => {
-  const { user, loading } = useAuth();
-  const location = useLocation();
-
-  const [onboarding, setOnboarding] = useState(null)
-  const [syncLoading, setSyncLoading] = useState(true);
-
-  useEffect(() => {
-    const sync = async () => {
-      if (!user || !user.emailVerified) {
-        setSyncLoading(false);
-        return;
-      }
-
-      try {
-        const result = await syncOnboarding();
-
-        setOnboarding(result.data);
-      } catch (error) {
-        console.error("Onboarding sync failed:", error);
-      } finally {
-        setSyncLoading(false);
-      }
-    };
-
-    sync();
-  }, [user, location.pathname])
+  const { user, loading: authLoading } = useAuth();
+  const { onboarding, loading: onboardingLoading } = useOnboarding();
   
-  if (!user) {
-    return <Navigate to="/sign-in" replace />
-  }
-
-  if (loading || syncLoading || (user?.emailVerified && !onboarding)) {
+  const location = useLocation();
+  
+  
+  if (authLoading || onboardingLoading) {
     return (
       <div className="min-h-screen bg-base-100 flex flex-col items-center justify-center gap-3">
         <span className="loading loading-spinner loading-lg text-primary" />
@@ -45,7 +20,11 @@ const OnboardingGuard = () => {
       </div>
     );
   }
-
+  
+  if (!user) {
+    return <Navigate to="/sign-in" replace />
+  }
+  
   if (!user.emailVerified) {
     if (location.pathname === "/verify-email") {
       return <Outlet />;

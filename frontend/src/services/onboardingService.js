@@ -5,3 +5,11 @@ export const syncOnboarding = async () => {
 
   return response.data;
 }
+
+export const updateRole = async (role) => {
+  const response = await api.patch("/onboarding/role", { 
+    role 
+  });
+
+  return response.data;
+}
