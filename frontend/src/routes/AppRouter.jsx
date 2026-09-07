@@ -4,6 +4,7 @@ import {
   Route,
 } from "react-router-dom";
 import ProtectedRoute from "./ProtectedRoute";
+import OnboardingGuard from "../guards/OnboardingGuard";
 
 import Register from "../pages/auth/Register";
 import Login from "../pages/auth/Login";
@@ -20,9 +21,12 @@ const router = createBrowserRouter(
 
       {/* Protected Routes */}
       <Route element={<ProtectedRoute />}>
-        <Route path="/verify-email" element={<VerifyEmail />} />
-        <Route path="/choose-role" element={<ChooseRole />} />
-        <Route path="/dashboard" element={<h1>Dashboard</h1>} />
+        <Route element={<OnboardingGuard />}>
+          <Route path="/verify-email" element={<VerifyEmail />} />
+          <Route path="/choose-role" element={<ChooseRole />} />
+          <Route path="/dashboard" element={<h1>Dashboard</h1>} />
+        </Route>
+        
       </Route>
     </>
   )

@@ -6,6 +6,7 @@ import toast from "react-hot-toast";
 
 import auth from "../../auth";
 import { useAuth } from "../../context/useAuth";
+import { syncOnboarding } from "../../services/onboardingService";
 
 const VerifyEmail = () => {
   const navigate = useNavigate();
@@ -27,12 +28,18 @@ const VerifyEmail = () => {
       await auth.currentUser.reload();
 
       if (auth.currentUser.emailVerified) {
+        const result = await syncOnboarding();
+
+        console.log("Onboarding sync result:", result);
+        
         toast.success("Email verified successfully!");
-        navigate("/choose-role")
+        
+        navigate("/choose-role");
       } else {
         toast.error("Your email is not verified yet.")
       }
     } catch (error) {
+      console.error("Onboarding sync error:", error);
       toast.error(error.message)
     } finally {
       setChecking(false);
