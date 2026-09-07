@@ -1,7 +1,7 @@
 import { firebaseAdminAuth } from "../config/firebaseAdmin.js";
 import ApiError from "../errors/ApiError.js";
 
-const authMiddleware = async (req, resizeBy, next) => {
+const authMiddleware = async (req, res, next) => {
   try {
     const authHeader = req.headers.authorization;
 
