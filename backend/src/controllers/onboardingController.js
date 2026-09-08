@@ -27,3 +27,29 @@ export const updateRole = async (req, res, next) => {
     next(error);
   }
 }
+
+export const createEmployeeProfile = async (req, res, next) => {
+  try {
+    const profile = await onboardingService.createEmployeeProfile(req.user, req.body);
+
+    return res.status(201).json({
+      success: true,
+      data: profile,
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+export const createRecruiterProfile = async (req, res, next) => {
+  try {
+    const profile = await onboardingService.createRecruiterProfile(req.user, req.body);
+
+    return res.status(201).json({
+      success: true,
+      data: profile,
+    });
+  } catch (error) {
+    next(error);
+  }
+}

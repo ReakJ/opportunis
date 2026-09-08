@@ -1,4 +1,6 @@
 import User from "../models/User.js"
+import EmployeeProfile from "../models/EmployeeProfile.js"
+import RecruiterProfile from "../models/RecruiterProfile.js"
 import ApiError from "../errors/ApiError.js"
 
 const ALLOWED_ROLES = [
@@ -49,3 +51,69 @@ export const updateRole = async (firebaseUser, role) => {
     onboardingStatus: user.onboardingStatus
   };
 };
+
+export const createEmployeeProfile = async (firebaseUser, profileData) => {
+  const user = await User.findOne({
+    firebaseUid: firebaseUser.uid
+  })
+
+  if (!user) {
+    throw new ApiError(404, "User not found");
+  }
+
+  if (user.role !== "employee") {
+    throw new ApiError(403, "Employee onboarding is only allowed")
+  }
+
+  const existingProfile = await EmployeeProfile.findOne({
+    user: user._id,
+  })
+
+  if (existingProfile) {
+    throw new ApiError(409, "Employee profile already exists");
+  }
+
+  const profile = await EmployeeProfile.create({
+    user: user._id,
+    ...profileData,
+  })
+
+  user.onboardingStatus = "completed";
+
+  await user.save();
+
+  return profile;
+}
+
+export const createRecruiterProfile = async (firebaseUser, profileData) => {
+  const user = await User.findOne({
+    firebaseUid: firebaseUser.uid
+  })
+
+  if (!user) {
+    throw new ApiError(404, "User not found");
+  }
+
+  if (user.role !== "recruiter") {
+    throw new ApiError(403, "Recruiter onboarding is only allowed")
+  }
+
+  const existingProfile = await RecruiterProfile.findOne({
+    user: user._id,
+  })
+
+  if (existingProfile) {
+    throw new ApiError(409, "Recruiter profile already exists");
+  }
+
+  const profile = await RecruiterProfile.create({
+    user: user._id,
+    ...profileData,
+  })
+
+  user.onboardingStatus = "completed";
+
+  await user.save();
+
+  return profile;
+}
