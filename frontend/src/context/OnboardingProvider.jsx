@@ -6,6 +6,8 @@ import { OnboardingContext } from "./OnboardingContext";
 import { 
   syncOnboarding as syncOnboardingService,
   updateRole as updateRoleService,
+  createEmployeeProfile as createEmployeeProfileService,
+  createRecruiterProfile as createRecruiterProfileService
 } from "../services/onboardingService";
 
 const OnboardingProvider = ({ children }) => {
@@ -23,6 +25,7 @@ const OnboardingProvider = ({ children }) => {
       setOnboarding(result.data);
     } catch (error) {
       console.error("Onboarding sync failed:", error);
+      throw error;
     } finally {
       setLoading(false);
     }
@@ -38,7 +41,48 @@ const OnboardingProvider = ({ children }) => {
 
       return result.data
     } catch (error) {
-      console.error("Onboarding sync failed:", error);
+      console.error("Role failed:", error);
+      throw error;
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  const createEmployeeProfile = useCallback(async (profileData) => {
+    try {
+      setLoading(true);
+
+      const result = await createEmployeeProfileService(profileData);
+
+      setOnboarding((current) => ({
+        ...current,
+        onboardingStatus: "completed"
+      }));
+
+      return result.data
+    } catch (error) {
+      console.error("Employee profile creation failed:", error);
+      throw error;
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  const createRecruiterProfile = useCallback(async (profileData) => {
+    try {
+      setLoading(true);
+
+      const result = await createRecruiterProfileService(profileData);
+
+      setOnboarding((current) => ({
+        ...current,
+        onboardingStatus: "completed"
+      }));
+
+      return result.data
+    } catch (error) {
+      console.error("Recruiter profile creation failed:", error);
+      throw error;
     } finally {
       setLoading(false);
     }
@@ -64,7 +108,9 @@ const OnboardingProvider = ({ children }) => {
         onboarding,
         loading,
         syncOnboarding,
-        updateRole
+        updateRole,
+        createEmployeeProfile,
+        createRecruiterProfile
       }}
     >
       {children}

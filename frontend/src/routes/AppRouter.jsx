@@ -12,6 +12,7 @@ import VerifyEmail from "../pages/auth/VerifyEmail";
 import ChooseRole from "../pages/onboarding/ChooseRole";
 import EmployeeProfileSetup from "../pages/onboarding/EmployeeProfileSetup";
 import RecruiterProfileSetup from "../pages/onboarding/RecruiterProfileSetup";
+import OnboardingLayout from "../components/onboarding/OnboardingLayout";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -23,13 +24,16 @@ const router = createBrowserRouter(
 
       {/* Protected Routes */}
       <Route element={<ProtectedRoute />}>
-        <Route element={<OnboardingGuard />}>
-          <Route path="/verify-email" element={<VerifyEmail />} />
-          <Route path="/choose-role" element={<ChooseRole />} />
-          <Route path="/employee/profile-setup" element={<EmployeeProfileSetup />} />
-          <Route path="/recruiter/profile-setup" element={<RecruiterProfileSetup />} />
+        {/* <Route element={<OnboardingGuard />}> */}
+          <Route element={<OnboardingLayout />}>
+            <Route path="/verify-email" element={<VerifyEmail />} />
+            <Route path="/choose-role" element={<ChooseRole />} />
+            <Route path="/employee/profile-setup" element={<EmployeeProfileSetup />} />
+            <Route path="/recruiter/profile-setup" element={<RecruiterProfileSetup />} />
+          </Route>
+
           <Route path="/dashboard" element={<h1>Dashboard</h1>} />
-        </Route>
+        {/* </Route> */}
         
       </Route>
     </>

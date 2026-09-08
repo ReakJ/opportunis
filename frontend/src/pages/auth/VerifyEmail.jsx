@@ -1,4 +1,5 @@
 import { useState } from "react";
+
 import { MailCheck, RefreshCw } from "lucide-react";
 import { sendEmailVerification } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
@@ -62,18 +63,18 @@ const VerifyEmail = () => {
     };
   }
 
-  if (loading) {
+if (loading) {
     return (
-      <div className="min-h-screen bg-base-200 flex items-center justify-center">
-        <span className="loading loading-spinner loading-lg" />
+      <div className="flex min-h-100 items-center justify-center">
+        <span className="loading loading-spinner loading-lg text-primary" />
       </div>
     );
   }
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-base-200 flex items-center justify-center px-4">
-        <div className="card bg-base-100 shadow-xl w-full max-w-md">
+      <div className="flex min-h-100 items-center justify-center px-4">
+        <div className="card w-full max-w-md border border-base-300 bg-base-100 shadow-sm">
           <div className="card-body items-center text-center">
             <h1 className="text-2xl font-bold">
               Authentication Required
@@ -85,8 +86,8 @@ const VerifyEmail = () => {
 
             <button
               type="button"
-              onClick={() => navigate("/login")}
-              className="btn btn-primary w-full mt-4"
+              onClick={() => navigate("/sign-in")}
+              className="btn btn-primary mt-4 w-full"
             >
               Go to Sign In
             </button>
@@ -97,49 +98,56 @@ const VerifyEmail = () => {
   }
 
   return (
-    <div className="min-h-screen bg-base-200 flex items-center justify-center px-4">
-      <div className="w-full max-w-md">
+    <div className="mx-auto w-full max-w-md pt-10">
+      {/* Page heading */}
+      <div className="mb-8 text-center">
+        <p className="mb-2 text-sm font-medium text-primary">
+          Let's secure your account
+        </p>
 
-        {/* Brand */}
-        <div className="text-center mb-6">
-          <h1 className="text-3xl font-bold">
-            Opportunis
-          </h1>
+        <h2 className="text-3xl font-bold tracking-tight text-base-content">
+          Verify your email
+        </h2>
 
-          <p className="text-base-content/60 mt-2">
-            Verify your email
+        <p className="mx-auto mt-3 max-w-md text-base text-base-content/60">
+          Confirm your email address to secure your account and continue
+          setting up your Opportunis profile.
+        </p>
+      </div>
+
+      {/* Verification card */}
+      <div className="card border border-base-300 bg-base-100 shadow-sm">
+        <div className="card-body items-center px-6 py-8 text-center sm:px-10 sm:py-10">
+          {/* Icon */}
+          <div className="mb-5 flex size-16 items-center justify-center rounded-2xl bg-primary/10">
+            <MailCheck className="size-8 text-primary" />
+          </div>
+
+          <h3 className="text-xl font-semibold text-base-content">
+            Check your inbox
+          </h3>
+
+          <p className="mt-2 text-sm leading-6 text-base-content/60">
+            We've sent a verification link to
           </p>
-        </div>
 
-        {/* Verification Card */}
-        <div className="card bg-base-100 shadow-xl">
-          <div className="card-body items-center text-center">
+          <p className="mt-1 max-w-full break-all font-medium text-base-content">
+            {user.email}
+          </p>
 
-            <MailCheck className="size-14 text-primary mb-2" />
+          <div className="my-6 h-px w-full bg-base-300" />
 
-            <h2 className="text-xl font-semibold">
-              Check your inbox
-            </h2>
+          <p className="text-sm leading-6 text-base-content/60">
+            Click the link in the email to verify your account. Once
+            you've verified it, come back here and continue below.
+          </p>
 
-            <p className="text-base-content/60">
-              We've sent a verification link to:
-            </p>
-
-            <p className="font-medium break-all">
-              {user.email}
-            </p>
-
-            <p className="text-sm text-base-content/60 mt-2">
-              Click the link in the email to verify your account.
-              Once you've done that, come back here and click the
-              button below.
-            </p>
-
-            {/* Check Verification */}
+          {/* Actions */}
+          <div className="mt-7 flex w-full flex-col gap-3">
             <button
               type="button"
               onClick={checkVerification}
-              className="btn btn-primary w-full mt-4"
+              className="btn btn-primary w-full"
               disabled={checking}
             >
               {checking ? (
@@ -152,11 +160,10 @@ const VerifyEmail = () => {
               )}
             </button>
 
-            {/* Resend */}
             <button
               type="button"
               onClick={resendVerification}
-              className="btn btn-outline w-full"
+              className="btn btn-ghost w-full"
               disabled={resending}
             >
               {resending ? (
@@ -167,17 +174,20 @@ const VerifyEmail = () => {
               ) : (
                 <>
                   <RefreshCw className="size-4" />
-                  Resend Verification Email
+                  Resend verification email
                 </>
               )}
             </button>
-
           </div>
         </div>
-
       </div>
+
+      {/* Small helper text */}
+      <p className="mt-5 text-center text-xs text-base-content/50">
+        Didn't receive the email? Check your spam or junk folder.
+      </p>
     </div>
-  )
-}
+  );
+};
 
 export default VerifyEmail;
