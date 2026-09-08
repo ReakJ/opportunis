@@ -52,13 +52,17 @@ const OnboardingGuard = () => {
   }
 
   if (onboardingStatus === "profile_setup") {
-    return (
-      <div className="min-h-screen bg-base-100 flex items-center justify-center">
-        <p>
-          Profile setup coming next...
-        </p>
-      </div>
-    );
+    if (role === "employee") {
+      if (location.pathname !== "/employee/profile-setup") {
+        return <Navigate to="/employee/profile-setup" replace />;
+      }
+    }
+
+    if (role === "recruiter") {
+      if (location.pathname !== "/recruiter/profile-setup") {
+        return <Navigate to="/recruiter/profile-setup" replace />;
+      }
+    }
   }
 
   if (onboardingStatus === "completed") {

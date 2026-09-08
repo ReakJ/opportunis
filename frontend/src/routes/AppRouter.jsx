@@ -10,6 +10,8 @@ import Register from "../pages/auth/Register";
 import Login from "../pages/auth/Login";
 import VerifyEmail from "../pages/auth/VerifyEmail";
 import ChooseRole from "../pages/onboarding/ChooseRole";
+import EmployeeProfileSetup from "../pages/onboarding/EmployeeProfileSetup";
+import RecruiterProfileSetup from "../pages/onboarding/RecruiterProfileSetup";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -24,6 +26,8 @@ const router = createBrowserRouter(
         <Route element={<OnboardingGuard />}>
           <Route path="/verify-email" element={<VerifyEmail />} />
           <Route path="/choose-role" element={<ChooseRole />} />
+          <Route path="/employee/profile-setup" element={<EmployeeProfileSetup />} />
+          <Route path="/recruiter/profile-setup" element={<RecruiterProfileSetup />} />
           <Route path="/dashboard" element={<h1>Dashboard</h1>} />
         </Route>
         
