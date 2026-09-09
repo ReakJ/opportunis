@@ -1,4 +1,11 @@
+import { useEffect, useState } from "react";
+
+import LocationInput from "../../components/profile/LocationInput";
+
 const EmployeeProfileSetup = () => {
+  const [location, setLocation] = useState(null);
+
+
   return (
     <div className="w-full pt-20">
       <div className="text-center">
@@ -31,6 +38,7 @@ const EmployeeProfileSetup = () => {
                 <label htmlFor="firstName" className="label">
                   First Name
                 </label>
+
                 <input
                   id="firstName"
                   type="text"
@@ -42,6 +50,7 @@ const EmployeeProfileSetup = () => {
                 <label htmlFor="lastName" className="label">
                   Last Name
                 </label>
+
                 <input
                   id="lastName"
                   type="text"
@@ -53,6 +62,7 @@ const EmployeeProfileSetup = () => {
                 <label htmlFor="phone" className="label">
                   Phone Number
                 </label>
+
                 <input
                   id="phone"
                   type="tel"
@@ -60,39 +70,20 @@ const EmployeeProfileSetup = () => {
                 />
               </div>
 
-              <div>
-                <label htmlFor="city" className="label">
-                  City
+              <div className="md:col-span-2">
+                <label htmlFor="location" className="label">
+                  Location
                 </label>
-                <input
-                  id="city"
-                  type="text"
-                  className="input input-bordered w-full"
+                
+                <LocationInput 
+                  id="location"
+                  value={location}
+                  onChange={(newLocation) => {
+                    setLocation(newLocation);
+                    console.log("Selected location:", newLocation)
+                  }}
                 />
               </div>
-
-              <div>
-                <label htmlFor="state" className="label">
-                  State
-                </label>
-                <input
-                  id="state"
-                  type="text"
-                  className="input input-bordered w-full"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="country" className="label">
-                  Country
-                </label>
-                <input
-                  id="country"
-                  type="text"
-                  className="input input-bordered w-full"
-                />
-              </div>
-
             </div>
           </section>
 
