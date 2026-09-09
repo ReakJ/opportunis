@@ -51,6 +51,19 @@ const employeeProfileSchema = new mongoose.Schema(
           required: true,
           trim: true
         },
+        
+        countryCode: {
+          type: String,
+          required: true,
+          uppercase: true,
+          trim: true,
+        },
+
+        pincode: {
+          type: String,
+          required: true,
+          trim: true,
+        },
       },
     },
     

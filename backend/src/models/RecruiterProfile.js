@@ -61,6 +61,19 @@ const recruiterProfileSchema = new mongoose.Schema(
           required: true,
           trim: true,
         },
+
+        countryCode: {
+          type: String,
+          required: true,
+          uppercase: true,
+          trim: true,
+        },
+
+        pincode: {
+          type: String,
+          required: true,
+          trim: true,
+        },
       }
     },
 
@@ -118,12 +131,27 @@ const recruiterProfileSchema = new mongoose.Schema(
           required: true,
           trim: true,
         },
+        
         state: {
           type: String,
           required: true,
           trim: true,
         },
+
         country: {
+          type: String,
+          required: true,
+          trim: true,
+        },
+
+        countryCode: {
+          type: String,
+          required: true,
+          uppercase: true,
+          trim: true,
+        },
+
+        pincode: {
           type: String,
           required: true,
           trim: true,
