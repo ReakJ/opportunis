@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-import LocationInput from "../../components/profile/LocationInput";
+import LocationSearch from "../../components/profile/LocationSearch";
+import LocationFields from "../../components/profile/LocationFields";
 
 const EmployeeProfileSetup = () => {
   const [location, setLocation] = useState(null);
-
+  const [manualLocation, setManualLocation] = useState(false);
 
   return (
     <div className="w-full pt-20">
@@ -63,26 +64,85 @@ const EmployeeProfileSetup = () => {
                   Phone Number
                 </label>
 
-                <input
-                  id="phone"
-                  type="tel"
-                  className="input input-bordered w-full"
-                />
+                <div className="flex gap-1">
+                  <input
+                    id="phone"
+                    type="tel"
+                    className="input input-bordered flex-1"
+                  />
+
+                  <input
+                    id="phone"
+                    type="tel"
+                    className="input input-bordered"
+                  />
+                </div>              
               </div>
 
               <div className="md:col-span-2">
-                <label htmlFor="location" className="label">
+                <label className="label">
                   Location
                 </label>
                 
-                <LocationInput 
-                  id="location"
-                  value={location}
-                  onChange={(newLocation) => {
-                    setLocation(newLocation);
-                    console.log("Selected location:", newLocation)
-                  }}
+                <LocationSearch 
+                  onSelect={setLocation}
+                  disabled={manualLocation}
                 />
+
+                {!manualLocation && !location && (
+                  <button
+                    type="button"
+                    onClick={() => setManualLocation(true)}
+                    className="mt-2 text-sm font-medium text-primary hover:underline"
+                  >
+                    Can't find your location? Enter it manually
+                  </button>
+                )}
+
+                {location && !manualLocation && (
+                  <div className="mt-5">
+                    <LocationFields 
+                      value={location}
+                      onChange={setLocation}
+                    />
+
+                    <button
+                      type="button"
+                      onClick={() => setLocation(null)}
+                      className="mt-4 text-sm font-medium text-primary hover:underline"
+                    >
+                      Search another location
+                    </button>
+                  </div>
+                )}
+
+                {manualLocation && (
+                  <div className="mt-5">
+                    <LocationFields 
+                      value={
+                        location || {
+                          city: "",
+                          state: "",
+                          country: "",
+                          countryCode: "",
+                          pincode: "",
+                        }
+                      }
+                      onChange={setLocation}
+                    />
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setManualLocation(false);
+                        setLocation(null);
+                      }}
+                      className="mt-4 text-sm font-medium text-primary hover:underline"
+                    >
+                      Search for your location instead
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           </section>

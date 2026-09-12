@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 
-const LocationInput = ({ value, onChange }) => {
+const LocationSearch = ({ onSelect, disabled = false }) => {
   const [query, setQuery] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -8,19 +8,26 @@ const LocationInput = ({ value, onChange }) => {
   const skipSearch = useRef(false);
 
   useEffect(() => {
+    if (disabled) {
+      setSuggestions([]);
+      setLoading(false);
+      return;
+    }
+
     if (skipSearch.current) {
       skipSearch.current = false;
       return;
     }
 
     if (!query.trim()) {
-      setSuggestions([])
+      setSuggestions([]);
       setLoading(false);
       return;
     }
+
     const controller = new AbortController();
 
-    const timeoutId = setTimeout(async() => {
+    const timeoutId = setTimeout(async () => {
       try {
         setLoading(true);
 
@@ -47,7 +54,7 @@ const LocationInput = ({ value, onChange }) => {
         setSuggestions(data.features || []);
       } catch (error) {
         if (error.name !== "AbortError") {
-          console.error("Location search failed:", error)
+          console.error("Location search failed:", error);
           setSuggestions([]);
         }
       } finally {
@@ -56,12 +63,12 @@ const LocationInput = ({ value, onChange }) => {
         }
       }
     }, 300);
-    
+
     return () => {
       clearTimeout(timeoutId);
       controller.abort();
     };
-  }, [query])
+  }, [query, disabled]);
 
   const handleSelect = (feature) => {
     const properties = feature.properties;
@@ -74,7 +81,7 @@ const LocationInput = ({ value, onChange }) => {
       pincode: properties.postcode || "",
     };
 
-    onChange(location);
+    onSelect(location);
 
     skipSearch.current = true;
     setQuery(properties.formatted || "");
@@ -84,17 +91,18 @@ const LocationInput = ({ value, onChange }) => {
 
   return (
     <div className="relative">
-      <input 
+      <input
         type="text"
         value={query}
         onChange={(event) => setQuery(event.target.value)}
-        placeholder="Search your city or postal code"
+        placeholder="Search your city"
         className="input input-bordered w-full"
+        disabled={disabled}
       />
 
       {loading && (
         <div className="absolute right-3 top-1/2 -translate-y-1/2">
-          <span className="loading loading-spinner loading-sm text-primary"/>
+          <span className="loading loading-spinner loading-sm text-primary" />
         </div>
       )}
 
@@ -110,7 +118,7 @@ const LocationInput = ({ value, onChange }) => {
               <p className="font-medium text-base-content">
                 {feature.properties.city || feature.properties.name}
               </p>
-              
+
               <p className="mt-1 text-sm text-base-content/60">
                 {feature.properties.formatted}
               </p>
@@ -118,9 +126,8 @@ const LocationInput = ({ value, onChange }) => {
           ))}
         </div>
       )}
-
     </div>
-  )
-}
+  );
+};
 
-export default LocationInput;
+export default LocationSearch;
