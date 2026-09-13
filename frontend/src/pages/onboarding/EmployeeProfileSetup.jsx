@@ -40,31 +40,33 @@ const EmployeeProfileSetup = () => {
             <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2">
 
               <div>
-                <label htmlFor="firstName" className="label">
+                <label htmlFor="firstName" className="label mb-0.5">
                   First Name
                 </label>
 
                 <input
                   id="firstName"
                   type="text"
-                  className="input input-bordered w-full"
+                  placeholder="John"
+                  className="input input-bordered w-full h-12 rounded-lg transition focus:outline-none focus:border-accent"
                 />
               </div>
 
               <div>
-                <label htmlFor="lastName" className="label">
+                <label htmlFor="lastName" className="label mb-0.5">
                   Last Name
                 </label>
 
                 <input
                   id="lastName"
                   type="text"
-                  className="input input-bordered w-full"
+                  placeholder="Doe"
+                  className="input input-bordered w-full h-12 rounded-lg transition focus:outline-none focus:border-accent"
                 />
               </div>
 
               <div>
-                <label htmlFor="phone" className="label">
+                <label htmlFor="phone" className="label mb-0.5">
                   Phone Number
                 </label>
 
@@ -77,7 +79,7 @@ const EmployeeProfileSetup = () => {
               </div>
 
               <div className="md:col-span-2">
-                <label className="label">
+                <label className="label mb-0.5">
                   Location
                 </label>
                 
@@ -155,24 +157,24 @@ const EmployeeProfileSetup = () => {
             <div className="mt-6 space-y-6">
 
               <div>
-                <label htmlFor="headline" className="label">
+                <label htmlFor="headline" className="label mb-0.5">
                   Professional Headline
                 </label>
                 <input
                   id="headline"
                   type="text"
                   placeholder="e.g. Frontend Developer"
-                  className="input input-bordered w-full"
+                  className="input input-bordered w-full h-12 rounded-lg transition focus:outline-none focus:border-accent"
                 />
               </div>
 
               <div>
-                <label htmlFor="experienceLevel" className="label">
+                <label htmlFor="experienceLevel" className="label mb-0.5">
                   Experience Level
                 </label>
                 <select
                   id="experienceLevel"
-                  className="select select-bordered w-full"
+                  className="select select-bordered w-full h-12 border-base-content/20 rounded-lg transition focus:outline-none focus:border-accent"
                   defaultValue=""
                 >
                   <option value="" disabled>
@@ -204,12 +206,12 @@ const EmployeeProfileSetup = () => {
               <input
                 type="text"
                 placeholder="e.g. React"
-                className="input input-bordered flex-1"
+                className="input input-bordered flex-1 h-12 rounded-lg transition focus:outline-none focus:border-accent"
               />
 
               <button
                 type="button"
-                className="btn btn-primary"
+                className="btn btn-primary h-12"
               >
                 Add
               </button>

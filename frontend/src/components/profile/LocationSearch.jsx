@@ -96,7 +96,7 @@ const LocationSearch = ({ onSelect, disabled = false }) => {
         value={query}
         onChange={(event) => setQuery(event.target.value)}
         placeholder="Search your city"
-        className="input input-bordered w-full"
+        className="input input-bordered w-full h-12 rounded-lg transition focus:outline-none focus:border-accent"
         disabled={disabled}
       />
 

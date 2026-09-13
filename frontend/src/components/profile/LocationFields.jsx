@@ -9,7 +9,7 @@ const LocationFields = ({ value, onChange }) => {
   return (
     <div className="mt-5 grid grid-cols-1 gap-6 md:grid-cols-2">
       <div>
-        <label htmlFor="location-city" className="label">
+        <label htmlFor="location-city" className="label mb-0.5">
           City
         </label>
 
@@ -20,12 +20,12 @@ const LocationFields = ({ value, onChange }) => {
           onChange={(event) => 
             handleChange("city", event.target.value)
           }
-          className="input input-bordered w-full"
+          className="input input-bordered w-full h-12 rounded-lg transition focus:outline-none focus:border-accent"
         />
       </div>
 
       <div>
-        <label htmlFor="location-state" className="label">
+        <label htmlFor="location-state" className="label mb-0.5">
           State / Province
         </label>
 
@@ -36,12 +36,12 @@ const LocationFields = ({ value, onChange }) => {
           onChange={(event) => 
             handleChange("state", event.target.value)
           }
-          className="input input-bordered w-full"
+          className="input input-bordered w-full h-12 rounded-lg transition focus:outline-none focus:border-accent"
         />
       </div>
 
       <div>
-        <label htmlFor="location-country" className="label">
+        <label htmlFor="location-country" className="label mb-0.5">
           Country
         </label>
 
@@ -52,12 +52,12 @@ const LocationFields = ({ value, onChange }) => {
           onChange={(event) => 
             handleChange("country", event.target.value)
           }
-          className="input input-bordered w-full"
+          className="input input-bordered w-full h-12 rounded-lg transition focus:outline-none focus:border-accent"
         />
       </div>
 
       <div>
-        <label htmlFor="location-pincode" className="label">
+        <label htmlFor="location-pincode" className="label mb-0.5">
           Pincode / Postal Code
         </label>
 
@@ -68,7 +68,7 @@ const LocationFields = ({ value, onChange }) => {
           onChange={(event) => 
             handleChange("pincode", event.target.value)
           }
-          className="input input-bordered w-full"
+          className="input input-bordered w-full h-12 rounded-lg transition focus:outline-none focus:border-accent"
         />
       </div>
     </div>
