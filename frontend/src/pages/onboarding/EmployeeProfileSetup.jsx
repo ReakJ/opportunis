@@ -2,10 +2,14 @@ import { useState } from "react";
 
 import LocationSearch from "../../components/profile/LocationSearch";
 import LocationFields from "../../components/profile/LocationFields";
+import PhoneInput from "../../components/profile/PhoneInput";
 
 const EmployeeProfileSetup = () => {
   const [location, setLocation] = useState(null);
   const [manualLocation, setManualLocation] = useState(false);
+  
+  const [phoneCountry, setPhoneCountry] = useState("IN");
+  const [phoneNumber, setPhoneNumber] = useState("");
 
   return (
     <div className="w-full pt-20">
@@ -64,19 +68,12 @@ const EmployeeProfileSetup = () => {
                   Phone Number
                 </label>
 
-                <div className="flex gap-1">
-                  <input
-                    id="phone"
-                    type="tel"
-                    className="input input-bordered flex-1"
-                  />
-
-                  <input
-                    id="phone"
-                    type="tel"
-                    className="input input-bordered"
-                  />
-                </div>              
+                <PhoneInput 
+                  country={phoneCountry}
+                  phoneNumber={phoneNumber}
+                  onCountryChange={setPhoneCountry}
+                  onPhoneNumberChange={setPhoneNumber}
+                />             
               </div>
 
               <div className="md:col-span-2">
