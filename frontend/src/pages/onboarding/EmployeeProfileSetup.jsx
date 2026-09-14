@@ -3,6 +3,7 @@ import { useState } from "react";
 import LocationSearch from "../../components/profile/LocationSearch";
 import LocationFields from "../../components/profile/LocationFields";
 import PhoneInput from "../../components/profile/PhoneInput";
+import SkillSelector from "../../components/profile/SkillSelector";
 
 const EmployeeProfileSetup = () => {
   const [location, setLocation] = useState(null);
@@ -10,6 +11,8 @@ const EmployeeProfileSetup = () => {
   
   const [phoneCountry, setPhoneCountry] = useState("IN");
   const [phoneNumber, setPhoneNumber] = useState("");
+
+  const [selectedSkills, setSelectedSkills] = useState([]);
 
   return (
     <div className="w-full pt-20">
@@ -48,7 +51,7 @@ const EmployeeProfileSetup = () => {
                   id="firstName"
                   type="text"
                   placeholder="John"
-                  className="input input-bordered w-full h-12 rounded-lg transition focus:outline-none focus:border-accent"
+                  className="input w-full h-12 rounded-lg transition focus:outline-none focus:border-accent"
                 />
               </div>
 
@@ -202,23 +205,12 @@ const EmployeeProfileSetup = () => {
               Add the skills you have that are relevant to your career.
             </p>
 
-            <div className="mt-6 flex gap-3">
-              <input
-                type="text"
-                placeholder="e.g. React"
-                className="input input-bordered flex-1 h-12 rounded-lg transition focus:outline-none focus:border-accent"
+            <div className="mt-6">
+              <SkillSelector 
+                selectedSkills={selectedSkills}
+                onChange={setSelectedSkills}
               />
-
-              <button
-                type="button"
-                className="btn btn-primary h-12"
-              >
-                Add
-              </button>
             </div>
-
-            {/* Skill chips will go here later */}
-
           </section>
 
           <div className="mt-10 flex justify-end">
