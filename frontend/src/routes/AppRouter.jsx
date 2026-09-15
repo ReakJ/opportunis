@@ -24,7 +24,7 @@ const router = createBrowserRouter(
 
       {/* Protected Routes */}
       <Route element={<ProtectedRoute />}>
-        {/* <Route element={<OnboardingGuard />}> */}
+        <Route element={<OnboardingGuard />}>
           <Route element={<OnboardingLayout />}>
             <Route path="/verify-email" element={<VerifyEmail />} />
             <Route path="/choose-role" element={<ChooseRole />} />
@@ -33,8 +33,7 @@ const router = createBrowserRouter(
           </Route>
 
           <Route path="/dashboard" element={<h1>Dashboard</h1>} />
-        {/* </Route> */}
-        
+        </Route>
       </Route>
     </>
   )

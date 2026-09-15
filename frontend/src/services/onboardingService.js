@@ -15,13 +15,13 @@ export const updateRole = async (role) => {
 }
 
 export const createEmployeeProfile = async (profileData) => {
-  const response = await api.patch("/onboarding/employee", profileData);
+  const response = await api.post("/onboarding/employee", profileData);
 
   return response.data;
 }
 
 export const createRecruiterProfile = async (profileData) => {
-  const response = await api.patch("/onboarding/recruiter", profileData);
+  const response = await api.post("/onboarding/recruiter", profileData);
 
   return response.data;
 }
