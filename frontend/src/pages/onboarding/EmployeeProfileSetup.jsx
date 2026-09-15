@@ -1,11 +1,18 @@
 import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 import LocationSearch from "../../components/profile/LocationSearch";
 import LocationFields from "../../components/profile/LocationFields";
 import PhoneInput from "../../components/profile/PhoneInput";
 import SkillSelector from "../../components/profile/SkillSelector";
 
+import { employeeProfileSchema } from "../../validation/employeeProfileSchema";
+import { useOnboarding } from "../../context/useOnboarding";
+
 const EmployeeProfileSetup = () => {
+  const { createEmployeeProfile } = useOnboarding();
+
   const [location, setLocation] = useState(null);
   const [manualLocation, setManualLocation] = useState(false);
   
@@ -13,6 +20,74 @@ const EmployeeProfileSetup = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
 
   const [selectedSkills, setSelectedSkills] = useState([]);
+
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors, isSubmitting },
+  } = useForm({
+    resolver: zodResolver(employeeProfileSchema),
+    defaultValues: {
+      personal: {
+        firstName: "",
+        lastName: "",
+        phone: "",
+        location: {
+          city: "",
+          state: "",
+          country: "",
+          countryCode: "",
+          pincode: "",
+        }
+      },
+      professional: {
+        headline: "",
+        experienceLevel: "",
+      },
+      skills: [],
+    },
+  });
+
+  const handleLocationSelect = (newLocation) => {
+    setLocation(newLocation);
+
+    setValue("personal.location", newLocation, {
+      shouldValidate: true,
+      shouldDirty: true,
+    });
+  };
+
+  const handleLocationChange = (newLocation) => {
+    setLocation(newLocation);
+
+    setValue("personal.location", newLocation, {
+      shouldValidate: true,
+      shouldDirty: true,
+    });
+  };
+
+  const handlePhoneNumberChange = (value) => {
+    setPhoneNumber(value);
+
+    setValue("personal.phone", value, {
+      shouldValidate: true,
+      shouldDirty: true,
+    });
+  };
+
+  const handleSkillsChange = (skills) => {
+    setSelectedSkills(skills);
+
+    setValue("skills", skills, {
+      shouldValidate: true,
+      shouldDirty: true,
+    });
+  };
+
+  const onSubmit = (data) => {
+    console.log("Form DATA:", data);
+  };
 
   return (
     <div className="w-full pt-20">
@@ -32,7 +107,10 @@ const EmployeeProfileSetup = () => {
       </div>
 
       <div className="card mt-10 border border-base-300 bg-base-100 shadow-sm">
-        <div className="card-body">
+        <form
+           onSubmit={handleSubmit(onSubmit)}
+          className="card-body"
+        >
 
           {/* Personal Information */}
           <section>
@@ -52,7 +130,14 @@ const EmployeeProfileSetup = () => {
                   type="text"
                   placeholder="John"
                   className="input w-full h-12 rounded-lg transition focus:outline-none focus:border-accent"
+                  {...register("personal.firstName")}
                 />
+
+                {errors.personal?.firstName && (
+                  <p className="mt-1 text-sm text-error">
+                    {errors.personal.firstName.message}
+                  </p>
+                )}
               </div>
 
               <div>
@@ -65,7 +150,14 @@ const EmployeeProfileSetup = () => {
                   type="text"
                   placeholder="Doe"
                   className="input input-bordered w-full h-12 rounded-lg transition focus:outline-none focus:border-accent"
+                  {...register("personal.lastName")}
                 />
+
+                {errors.personal?.lastName && (
+                  <p className="mt-1 text-sm text-error">
+                    {errors.personal.lastName.message}
+                  </p>
+                )}
               </div>
 
               <div>
@@ -77,24 +169,48 @@ const EmployeeProfileSetup = () => {
                   country={phoneCountry}
                   phoneNumber={phoneNumber}
                   onCountryChange={setPhoneCountry}
-                  onPhoneNumberChange={setPhoneNumber}
-                />             
+                  onPhoneNumberChange={handlePhoneNumberChange}
+                />
+
+                {errors.personal?.phone && (
+                  <p className="mt-1 text-sm text-error">
+                    {errors.personal.phone.message}
+                  </p>
+                )}             
               </div>
 
               <div className="md:col-span-2">
                 <label className="label mb-0.5">
                   Location
                 </label>
-                
-                <LocationSearch 
-                  onSelect={setLocation}
+
+                <LocationSearch
+                  onSelect={handleLocationSelect}
                   disabled={manualLocation}
                 />
 
                 {!manualLocation && !location && (
                   <button
                     type="button"
-                    onClick={() => setManualLocation(true)}
+                    onClick={() => {
+                      setManualLocation(true);
+                      setLocation(null);
+
+                      setValue(
+                        "personal.location",
+                        {
+                          city: "",
+                          state: "",
+                          country: "",
+                          countryCode: "",
+                          pincode: "",
+                        },
+                        {
+                          shouldValidate: false,
+                          shouldDirty: true,
+                        }
+                      );
+                    }}
                     className="mt-2 text-sm font-medium text-primary hover:underline"
                   >
                     Can't find your location? Enter it manually
@@ -103,14 +219,31 @@ const EmployeeProfileSetup = () => {
 
                 {location && !manualLocation && (
                   <div className="mt-5">
-                    <LocationFields 
+                    <LocationFields
                       value={location}
-                      onChange={setLocation}
+                      onChange={handleLocationChange}
                     />
 
                     <button
                       type="button"
-                      onClick={() => setLocation(null)}
+                      onClick={() => {
+                        setLocation(null);
+
+                        setValue(
+                          "personal.location",
+                          {
+                            city: "",
+                            state: "",
+                            country: "",
+                            countryCode: "",
+                            pincode: "",
+                          },
+                          {
+                            shouldValidate: false,
+                            shouldDirty: true,
+                          }
+                        );
+                      }}
                       className="mt-4 text-sm font-medium text-primary hover:underline"
                     >
                       Search another location
@@ -120,7 +253,7 @@ const EmployeeProfileSetup = () => {
 
                 {manualLocation && (
                   <div className="mt-5">
-                    <LocationFields 
+                    <LocationFields
                       value={
                         location || {
                           city: "",
@@ -130,7 +263,7 @@ const EmployeeProfileSetup = () => {
                           pincode: "",
                         }
                       }
-                      onChange={setLocation}
+                      onChange={handleLocationChange}
                     />
 
                     <button
@@ -138,12 +271,33 @@ const EmployeeProfileSetup = () => {
                       onClick={() => {
                         setManualLocation(false);
                         setLocation(null);
+
+                        setValue(
+                          "personal.location",
+                          {
+                            city: "",
+                            state: "",
+                            country: "",
+                            countryCode: "",
+                            pincode: "",
+                          },
+                          {
+                            shouldValidate: false,
+                            shouldDirty: true,
+                          }
+                        );
                       }}
                       className="mt-4 text-sm font-medium text-primary hover:underline"
                     >
                       Search for your location instead
                     </button>
                   </div>
+                )}
+
+                {errors.personal?.location && (
+                  <p className="mt-1 text-sm text-error">
+                    Please provide your complete location.
+                  </p>
                 )}
               </div>
             </div>
@@ -168,7 +322,14 @@ const EmployeeProfileSetup = () => {
                   type="text"
                   placeholder="e.g. Frontend Developer"
                   className="input input-bordered w-full h-12 rounded-lg transition focus:outline-none focus:border-accent"
+                  {...register("professional.headline")}
                 />
+
+                {errors.professional?.headline && (
+                  <p className="mt-1 text-sm text-error">
+                    {errors.professional.headline.message}
+                  </p>
+                )}
               </div>
 
               <div>
@@ -179,6 +340,7 @@ const EmployeeProfileSetup = () => {
                   id="experienceLevel"
                   className="select select-bordered w-full h-12 border-base-content/20 rounded-lg transition focus:outline-none focus:border-accent"
                   defaultValue=""
+                  {...register("professional.experienceLevel")}
                 >
                   <option value="" disabled>
                     Select your experience level
@@ -188,8 +350,13 @@ const EmployeeProfileSetup = () => {
                   <option value="mid">Mid Level</option>
                   <option value="senior">Senior Level</option>
                 </select>
-              </div>
 
+                {errors.professional?.experienceLevel && (
+                  <p className="mt-1 text-sm text-error">
+                    {errors.professional.experienceLevel.message}
+                  </p>
+                )}
+              </div>
             </div>
           </section>
 
@@ -208,21 +375,34 @@ const EmployeeProfileSetup = () => {
             <div className="mt-6">
               <SkillSelector 
                 selectedSkills={selectedSkills}
-                onChange={setSelectedSkills}
+                onChange={handleSkillsChange}
               />
+
+              {errors.skills && (
+                <p className="mt-2 text-sm text-error">
+                  {errors.skills.message}
+                </p>
+              )}
             </div>
           </section>
 
           <div className="mt-10 flex justify-end">
             <button
-              type="button"
+              type="submit"
+              disabled={isSubmitting}
               className="btn btn-primary px-8"
             >
-              Continue →
+              {isSubmitting ? (
+                <>
+                  <span className="loading loading-spinner loading-sm" />
+                  Saving...
+                </>
+              ) : (
+                "Continue →"
+              )}
             </button>
           </div>
-
-        </div>
+        </form>
       </div>
     </div>
   );
