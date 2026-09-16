@@ -9,6 +9,7 @@ import SkillSelector from "../../components/profile/SkillSelector";
 
 import { employeeProfileSchema } from "../../validation/employeeProfileSchema";
 import { useOnboarding } from "../../context/useOnboarding";
+import toast from "react-hot-toast";
 
 const EmployeeProfileSetup = () => {
   const { createEmployeeProfile } = useOnboarding();
@@ -80,8 +81,12 @@ const EmployeeProfileSetup = () => {
     });
   };
 
-  const onSubmit = (data) => {
-    console.log("Form DATA:", data);
+  const onSubmit = async (profileData) => {
+    try {
+      await createEmployeeProfile(profileData);
+    } catch (error) {
+      toast.error(error.message)
+    }
   };
 
   return (
