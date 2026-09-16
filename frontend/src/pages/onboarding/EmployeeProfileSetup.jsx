@@ -15,9 +15,6 @@ const EmployeeProfileSetup = () => {
 
   const [location, setLocation] = useState(null);
   const [manualLocation, setManualLocation] = useState(false);
-  
-  const [phoneCountry, setPhoneCountry] = useState("IN");
-  const [phoneNumber, setPhoneNumber] = useState("");
 
   const [selectedSkills, setSelectedSkills] = useState([]);
 
@@ -68,8 +65,6 @@ const EmployeeProfileSetup = () => {
   };
 
   const handlePhoneNumberChange = (value) => {
-    setPhoneNumber(value);
-
     setValue("personal.phone", value, {
       shouldValidate: true,
       shouldDirty: true,
@@ -166,10 +161,8 @@ const EmployeeProfileSetup = () => {
                 </label>
 
                 <PhoneInput 
-                  country={phoneCountry}
-                  phoneNumber={phoneNumber}
-                  onCountryChange={setPhoneCountry}
-                  onPhoneNumberChange={handlePhoneNumberChange}
+                  defaultCountry="IN"
+                  onChange={handlePhoneNumberChange}
                 />
 
                 {errors.personal?.phone && (

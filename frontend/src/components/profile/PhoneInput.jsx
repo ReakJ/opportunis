@@ -7,17 +7,14 @@ import {
   getCountries,
   getCountryCallingCode,
   formatIncompletePhoneNumber,
+  parsePhoneNumberFromString
 } from "libphonenumber-js";
 
-const PhoneInput = ({
-  country,
-  phoneNumber,
-  onCountryChange,
-  onPhoneNumberChange,
-}) => {
+const PhoneInput = ({ defaultCountry = "IN", onChange }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [search, setSearch] = useState("");
-
+  const [country, setCountry] = useState(defaultCountry);
+  const [phoneNumber, setPhoneNumber] = useState("")
   const dropdownRef = useRef(null);
 
   const countries = useMemo(() => {
@@ -53,7 +50,19 @@ const PhoneInput = ({
     : "";
 
   const handleCountrySelect = (countryCode) => {
-    onCountryChange(countryCode);
+    setCountry(countryCode);
+
+    if (phoneNumber) {
+      const parsed = parsePhoneNumberFromString(
+        phoneNumber,
+        countryCode
+      );
+
+      onChange(parsed?.number || "");
+    } else {
+      onChange("");
+    }
+
     setIsOpen(false);
     setSearch("");
   };
@@ -61,7 +70,16 @@ const PhoneInput = ({
   const handlePhoneChange = (event) => {
     const digits = event.target.value.replace(/\D/g, "");
 
-    onPhoneNumberChange(digits);
+    setPhoneNumber(digits);
+
+    if (!digits) {
+      onChange("");
+      return;
+    }
+
+    const parsed = parsePhoneNumberFromString(digits, country);
+
+    onChange(parsed?.number || "");
   };
 
   useEffect(() => {
