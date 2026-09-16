@@ -2,8 +2,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import LocationSearch from "../../components/profile/LocationSearch";
-import LocationFields from "../../components/profile/LocationFields";
+import LocationInput from "../../components/profile/location/LocationInput";
 import PhoneInput from "../../components/profile/PhoneInput";
 import SkillSelector from "../../components/profile/SkillSelector";
 
@@ -13,9 +12,6 @@ import toast from "react-hot-toast";
 
 const EmployeeProfileSetup = () => {
   const { createEmployeeProfile } = useOnboarding();
-
-  const [location, setLocation] = useState(null);
-  const [manualLocation, setManualLocation] = useState(false);
 
   const [selectedSkills, setSelectedSkills] = useState([]);
 
@@ -47,23 +43,12 @@ const EmployeeProfileSetup = () => {
     },
   });
 
-  const handleLocationSelect = (newLocation) => {
-    setLocation(newLocation);
-
-    setValue("personal.location", newLocation, {
-      shouldValidate: true,
-      shouldDirty: true,
-    });
-  };
-
   const handleLocationChange = (newLocation) => {
-    setLocation(newLocation);
-
     setValue("personal.location", newLocation, {
       shouldValidate: true,
       shouldDirty: true,
-    });
-  };
+    })
+  }
 
   const handlePhoneNumberChange = (value) => {
     setValue("personal.phone", value, {
@@ -108,7 +93,7 @@ const EmployeeProfileSetup = () => {
 
       <div className="card mt-10 border border-base-300 bg-base-100 shadow-sm">
         <form
-           onSubmit={handleSubmit(onSubmit)}
+          onSubmit={handleSubmit(onSubmit)}
           className="card-body"
         >
 
@@ -182,115 +167,9 @@ const EmployeeProfileSetup = () => {
                   Location
                 </label>
 
-                <LocationSearch
-                  onSelect={handleLocationSelect}
-                  disabled={manualLocation}
+                <LocationInput 
+                  onChange={handleLocationChange}
                 />
-
-                {!manualLocation && !location && (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setManualLocation(true);
-                      setLocation(null);
-
-                      setValue(
-                        "personal.location",
-                        {
-                          city: "",
-                          state: "",
-                          country: "",
-                          countryCode: "",
-                          pincode: "",
-                        },
-                        {
-                          shouldValidate: false,
-                          shouldDirty: true,
-                        }
-                      );
-                    }}
-                    className="mt-2 text-sm font-medium text-primary hover:underline"
-                  >
-                    Can't find your location? Enter it manually
-                  </button>
-                )}
-
-                {location && !manualLocation && (
-                  <div className="mt-5">
-                    <LocationFields
-                      value={location}
-                      onChange={handleLocationChange}
-                    />
-
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setLocation(null);
-
-                        setValue(
-                          "personal.location",
-                          {
-                            city: "",
-                            state: "",
-                            country: "",
-                            countryCode: "",
-                            pincode: "",
-                          },
-                          {
-                            shouldValidate: false,
-                            shouldDirty: true,
-                          }
-                        );
-                      }}
-                      className="mt-4 text-sm font-medium text-primary hover:underline"
-                    >
-                      Search another location
-                    </button>
-                  </div>
-                )}
-
-                {manualLocation && (
-                  <div className="mt-5">
-                    <LocationFields
-                      value={
-                        location || {
-                          city: "",
-                          state: "",
-                          country: "",
-                          countryCode: "",
-                          pincode: "",
-                        }
-                      }
-                      onChange={handleLocationChange}
-                    />
-
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setManualLocation(false);
-                        setLocation(null);
-
-                        setValue(
-                          "personal.location",
-                          {
-                            city: "",
-                            state: "",
-                            country: "",
-                            countryCode: "",
-                            pincode: "",
-                          },
-                          {
-                            shouldValidate: false,
-                            shouldDirty: true,
-                          }
-                        );
-                      }}
-                      className="mt-4 text-sm font-medium text-primary hover:underline"
-                    >
-                      Search for your location instead
-                    </button>
-                  </div>
-                )}
 
                 {errors.personal?.location && (
                   <p className="mt-1 text-sm text-error">
