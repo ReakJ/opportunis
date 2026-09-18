@@ -1,3 +1,5 @@
+import { getNames, getCode } from "country-list";
+
 const LocationFields = ({ value, onChange }) => {
   const handleChange = (field, fieldValue) => {
     onChange({
@@ -45,15 +47,29 @@ const LocationFields = ({ value, onChange }) => {
           Country
         </label>
 
-        <input 
+        <select
           id="location-country"
-          type="text" 
           value={value.country}
-          onChange={(event) => 
-            handleChange("country", event.target.value)
-          }
-          className="input input-bordered w-full h-12 rounded-lg transition focus:outline-none focus:border-accent"
-        />
+          onChange={(event) => {
+            const country = event.target.value;
+
+            onChange({
+              ...value,
+              country,
+              countryCode: getCode(country) || "",
+            });
+          }}
+
+          className="select w-full h-12 rounded-lg"
+        >
+          <option value="" disabled>Select country</option>
+
+          {getNames().map((country) => (
+            <option key={country} value={country}>
+              {country}
+            </option>
+          ))}
+        </select>
       </div>
 
       <div>
