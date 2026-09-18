@@ -3,7 +3,8 @@ import { X, Plus } from "lucide-react";
 
 import { skills } from "../../data/skills";
 
-const SkillSelector = ({ selectedSkills = [], onChange }) => {
+const SkillSelector = ({ onChange }) => {
+  const [selectedSkills, setSelectedSkills] = useState([]);
   const [query, setQuery] = useState("");
 
   const filteredSkills = useMemo(() => {
@@ -48,16 +49,21 @@ const SkillSelector = ({ selectedSkills = [], onChange }) => {
       return;
     }
 
-    onChange([...selectedSkills, trimmedSkill]);
+    const updatedSkills = [...selectedSkills, trimmedSkill];
+
+    setSelectedSkills(updatedSkills);
+    onChange(updatedSkills);
     setQuery("");
   }
 
   const removeSkill = (skillToRemove) => {
-    onChange(
-      selectedSkills.filter(
+
+    const updatedSkills = selectedSkills.filter(
         (skill) => skill.toLowerCase() !== skillToRemove.toLowerCase()
       )
-    );
+
+    setSelectedSkills([...updatedSkills]);
+    onChange([...updatedSkills]);
   }
 
   const showSuggestions = query.trim().length >= 2;

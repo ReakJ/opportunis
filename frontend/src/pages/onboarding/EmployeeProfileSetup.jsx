@@ -13,8 +13,6 @@ import toast from "react-hot-toast";
 const EmployeeProfileSetup = () => {
   const { createEmployeeProfile } = useOnboarding();
 
-  const [selectedSkills, setSelectedSkills] = useState([]);
-
   const {
     register,
     handleSubmit,
@@ -58,8 +56,6 @@ const EmployeeProfileSetup = () => {
   };
 
   const handleSkillsChange = (skills) => {
-    setSelectedSkills(skills);
-
     setValue("skills", skills, {
       shouldValidate: true,
       shouldDirty: true,
@@ -251,7 +247,6 @@ const EmployeeProfileSetup = () => {
 
             <div className="mt-6">
               <SkillSelector 
-                selectedSkills={selectedSkills}
                 onChange={handleSkillsChange}
               />
 
